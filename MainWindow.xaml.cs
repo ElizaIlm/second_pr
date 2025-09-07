@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace second_pr
 {
@@ -22,10 +23,33 @@ namespace second_pr
     {
         /// <summary> Данные игрока </summary>
         public Classes.PersonInfo Player = new Classes.PersonInfo("Student", 100, 10, 1, 0, 0, 5);
+        /// <summary> Коллекция противников </summary>
+        public List<Classes.PersonInfo> Enemys = new List<Classes.PersonInfo>();
+        DispatcherTimer dispatcherTimer = new DispatcherTimer();
         public MainWindow()
         {
             InitializeComponent();
+
+            // Повышаем уровень персонажа и обновляем данные на UI
             UserInfoPlayer();
+
+            // Добавляем данные о противниках в коллекцию
+            Enemys.Add(new Classes.PersonInfo("Название врага №1", 100, 20, 1, 15, 5, 20));
+            Enemys.Add(new Classes.PersonInfo("Название врага №2", 20, 5, 1, 5, 2, 5));
+            Enemys.Add(new Classes.PersonInfo("Название врага №3", 50, 3, 1, 10, 10, 15));
+
+            // Задаём настройки для таймера
+            dispatcherTimer.Tick += AttackPlayer;
+            // Задаём интервал с которым выполняется таймер
+            dispatcherTimer.Interval = new System.TimeSpan(0, 0, 10);
+            // Запускаем таймер
+            dispatcherTimer.Start();
+        }
+
+        // Метод, который наносит периодический урон игроку
+        private void AttackPlayer(object sender, System.EventArgs e)
+        {
+            
         }
         /// <summary> Повышение уровня и обновление данных на UI </summary>
         public void UserInfoPlayer()
