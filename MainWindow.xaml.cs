@@ -113,6 +113,33 @@ namespace second_pr
                 Enemys[index].Money,
                 Enemys[index].Damage);
         }
+        /// <summary>
+        /// Метод, который наносит урон врагу при клике по нему
+        /// </summary>
+        private void AttackEnemy(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            // Наносим урон в процентном соотношении с учётом брони врага
+            Enemy.Health -= Convert.ToInt32(Player.Damage * 100f / (100f - Enemy.Armor));
+
+            // Если жизненные показатели врага меньше или равны 0
+            if (Enemy.Health <= 0)
+            {
+                // Увеличиваем очки опыта игрока
+                Player.Glasses += Enemy.Glasses;
+                // Увеличиваем монеты игрока
+                Player.Money += Enemy.Money;
+                // Обновляем информацию на интерфейсе
+                UserInfoPlayer();
+                // Выбираем нового противника для следующего боя
+                SelectEnemy();
+            }
+            else
+            {
+                // Обновляем отображение характеристик врага на UI
+                emptyHealth.Content = "Жизненные показатели: " + Enemy.Health;
+                emptyArmor.Content = "Броня: " + Enemy.Armor;
+            }
+        }
 
     }
 }
