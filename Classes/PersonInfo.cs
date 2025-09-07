@@ -38,6 +38,10 @@ namespace second_pr.Classes
             this.Money = Money;
             this.Damage = Damage;
         }
+        /// <summary>
+        /// Множитель опыта  0.3 = +30% по базе 0 процентов максимум 30 
+        /// </summary>
+        public double chtoto { get; set; } = 0.0;
     }
 
 }

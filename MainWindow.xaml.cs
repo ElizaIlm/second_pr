@@ -118,26 +118,50 @@ namespace second_pr
         /// </summary>
         private void AttackEnemy(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            // Наносим урон в процентном соотношении с учётом брони врага
-            Enemy.Health -= Convert.ToInt32(Player.Damage * 100f / (100f - Enemy.Armor));
+            //// Наносим урон в процентном соотношении с учётом брони врага
+            //Enemy.Health -= Convert.ToInt32(Player.Damage * 100f / (100f - Enemy.Armor));
 
-            // Если жизненные показатели врага меньше или равны 0
-            if (Enemy.Health <= 0)
-            {
-                // Увеличиваем очки опыта игрока
-                Player.Glasses += Enemy.Glasses;
-                // Увеличиваем монеты игрока
-                Player.Money += Enemy.Money;
-                // Обновляем информацию на интерфейсе
-                UserInfoPlayer();
-                // Выбираем нового противника для следующего боя
-                SelectEnemy();
-            }
-            else
-            {
-                // Обновляем отображение характеристик врага на UI
-                emptyHealth.Content = "Жизненные показатели: " + Enemy.Health;
+            //// Если жизненные показатели врага меньше или равны 0
+            //if (Enemy.Health <= 0)
+            //{
+            //    // Увеличиваем очки опыта игрока
+            //    Player.Glasses += Enemy.Glasses;
+            //    // Увеличиваем монеты игрока
+            //    Player.Money += Enemy.Money;
+            //    // Обновляем информацию на интерфейсе
+            //    UserInfoPlayer();
+            //    // Выбираем нового противника для следующего боя
+            //    SelectEnemy();
+            //}
+            //else
+            //{
+            //    emptyHealth.Content = "Жизненные показатели: " + Enemy.Health;
+            //    emptyArmor.Content = "Броня: " + Enemy.Armor;
+            //}
+           
+                // Наносим урон врагу с учётом его брони
+                int damage = Convert.ToInt32(Player.Damage * 100f / (100 - Enemy.Armor));
+                Enemy.Health -= damage;
+
+                // Обновляем отображение HP врага
+                emptyHealth.Content = "Жизненные показатели: " + Math.Max(0, Enemy.Health);
                 emptyArmor.Content = "Броня: " + Enemy.Armor;
+
+                // Если враг повержен
+                if (Enemy.Health <= 0)
+                {
+                    // Получаем опыт с учётом множителя (до +30%)
+                    int earnedExp = (int)(Enemy.Glasses * (1 + Player.chtoto));
+                    Player.Glasses += earnedExp;
+
+                    // Получаем деньги
+                    Player.Money += Enemy.Money;
+
+                    // Обновляем интерфейс
+                    UserInfoPlayer();
+
+                    // Выбираем нового врага
+                    SelectEnemy();
             }
         }
 
