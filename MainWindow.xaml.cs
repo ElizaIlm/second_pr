@@ -26,6 +26,8 @@ namespace second_pr
         /// <summary> Коллекция противников </summary>
         public List<Classes.PersonInfo> Enemys = new List<Classes.PersonInfo>();
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
+        public Classes.PersonInfo Enemy;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -44,12 +46,24 @@ namespace second_pr
             dispatcherTimer.Interval = new System.TimeSpan(0, 0, 10);
             // Запускаем таймер
             dispatcherTimer.Start();
+            dispatcherTimer.Interval = new System.TimeSpan(0, 0, 10);
+        // Запускаем таймер
+        dispatcherTimer.Start();
+
+            // Вызываем метод выбора случайного противника
+            SelectEnemy();
         }
 
-        // Метод, который наносит периодический урон игроку
+        /// <summary>
+        /// Метод, который наносит периодический урон игроку
+        /// </summary>
         private void AttackPlayer(object sender, System.EventArgs e)
         {
-            
+            // Наносим урон в процентном соотношении с учётом брони игрока
+            Player.Health = Convert.ToInt32(Enemy.Damage * 100f / (100f - Player.Armor));
+
+            // Обновляем характеристики персонажа на интерфейсе
+            UserInfoPlayer();
         }
         /// <summary> Повышение уровня и обновление данных на UI </summary>
         public void UserInfoPlayer()
@@ -74,6 +88,30 @@ namespace second_pr
             playerLevel.Content = "Уровень: " + Player.Level;
             playerGlasses.Content = "Опыт: " + Player.Glasses;
             playerMoney.Content = "Монеты: " + Player.Money;
+
+        }
+        /// <summary>
+        /// Выбор случайного противника из списка врагов
+        /// </summary>
+        public void SelectEnemy()
+        {
+            if (Enemys == null || Enemys.Count == 0)
+            {
+                MessageBox.Show("Список врагов пуст!");
+                return;
+            }
+
+            Random random = new Random();
+            int index = random.Next(Enemys.Count);
+
+            Enemy = new Classes.PersonInfo(
+                Enemys[index].Name,
+                Enemys[index].Health,
+                Enemys[index].Armor,
+                Enemys[index].Level,
+                Enemys[index].Glasses,
+                Enemys[index].Money,
+                Enemys[index].Damage);
         }
 
     }
